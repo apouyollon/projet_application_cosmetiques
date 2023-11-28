@@ -4,61 +4,71 @@ let g_produits_db = [
     "nom":"Shampoing pêche",
     "marque":"Dior",
     "type":"shampoing",
-    "magasins":[1,2,3,4]
+    "magasins":[1,2,3,4],
+    "id":1
 },
 {
     "nom":"Shampoing pomme",
     "marque":"Dior",
     "type":"shampoing",
-    "magasins":[1,2,4]
+    "magasins":[1,2,4],
+    "id":2
 },
 {
     "nom":"Rouge-à-lèvres carmin",
     "marque":"Fancy Beauty",
     "type":"rouge-à-lèvres",
-    "magasins":[2,4,5]
+    "magasins":[2,4,5],
+    "id":3
 },
 {
     "nom":"Rouge-à-lèvres passion",
     "marque":"Fancy Beauty",
     "type":"rouge-à-lèvres",
-    "magasins":[1,3,5]
+    "magasins":[1,3,5],
+    "id":4
 },
 {
     "nom":"Rouge-à-lèvres cerise",
     "marque":"Dior",
     "type":"rouge-à-lèvres",
-    "magasins":[2,3]
+    "magasins":[2,3],
+    "id":5
 },
 {
     "nom":"Parfum roses",
     "marque":"Yves Rocher",
     "type":"parfum",
-    "magasins":[1,2,3,4,5]
+    "magasins":[1,2,3,4,5],
+    "id":6
 },
 {
     "nom":"Parfum fleurs des prés",
     "marque":"Yves Rocher",
     "type":"parfum",
-    "magasins":[1,2,5]
+    "magasins":[1,2,5],
+    "id":7
 },
 {
     "nom":"Parfum carmen",
     "marque":"Fancy Beauty",
     "type":"parfum",
-    "magasins":[3,4,5]
+    "magasins":[3,4,5],
+    "id":8
 },
 {
     "nom":"Parfum milady",
     "marque":"Fancy Beauty",
     "type":"parfum",
-    "magasins":[1,3,4]
+    "magasins":[1,3,4],
+    "id":9
 },
 {
     "nom":"Parfum beauty",
     "marque":"Dior",
     "type":"parfum",
-    "magasins":[4,5]
+    "magasins":[4,5],
+    "id":10
 }
 ];
 
@@ -94,34 +104,9 @@ let g_magasins_db = [
 let g_list_marque = [];
 let g_list_type = [];
 
-// requête Fetch
-async function get_pokemon(callback_1,callback_2) {
-    const response = await fetch('https://tyradex.vercel.app/api/v1/pokemon', {
-    // fetch permet d'aller chercher la liste de tous les pokemons
-    method: "GET"
-    });
-    let result = await response.json();
-    // créer un nouveau tableau dont on supprime le premier élément (pas de pokemon pour l'Id 0)
-    let new_result =result.slice(1);
-    g_list_pokemon = new_result;
-    // on stocke la liste des pokémons dans le tableau g_list_pokemon
-    console.log(g_list_pokemon);
-    // génère la fiche d'un pokémon tiré aléatoirement entre 1 et la longueur du tableau
-    // à chaque rechargement de la page ou à chaque arrivée sur la page d'accueil
-    show_pokemons_reduct(Math.floor(Math.random() * g_list_pokemon.length)+1);
-    callback_1(new_result);
-    // on envoie la réponse du serveur à une nouvelle fonction
-    // qui ne récupérera qu'une partie des valeurs du tableau
-    callback_2(new_result);
-}
-
-
-
-
-
 
 // fonctions get_list_ : obtenir les différents types et générations
-function get_list_gen(p_tab_pokemon) {
+function order_products() {
     // console.log(p_tab_pokemon);
     // création d'un tableau intermédiaire ne contenant que le champs génération
     var interim_gen_tab = [];
@@ -133,9 +118,6 @@ function get_list_gen(p_tab_pokemon) {
     // remove_duplicates_in_tab renvoie un nouveau tableau (tab_no_duplicates)
     console.log(g_list_marque);
     show_list_gen();
-}
-
-function get_list_type(p_tab_pokemon) {
     var interim_type_tab = [];
     for (let i=0; i<p_tab_pokemon.length; i++) {
         // création d'un deuxième tableau pour parcourir plusieurs éléments
@@ -249,113 +231,29 @@ function show_pokemons_in_list_type(p_type) {
 
 
 // fonctions show_pokemons_ : affichent les fiches d'un pokémon dans une div
-function show_pokemons_details(p_id) {
+function show_selling_shops(p_id) {
     var pokemon_to_show = g_list_pokemon.filter((e) => e.pokedexId==p_id)[0];
     console.log(pokemon_to_show);
 
     let pokemon_detail = template_reduct_pokemon(pokemon_to_show);
 
     $('#pokemon_details').html(pokemon_detail);
-    
-    // n'afficher les évolutions que si elles existent
-    if (pokemon_to_show.evolution.pre != null){
-        if (pokemon_to_show.evolution.pre.length == 2) {
-            let evolution_precedente = `<div class='evolution'>
-            <h3>Evolutions précédentes : </h3> 
-            <p>`+ pokemon_to_show.evolution.pre[0].name +`</p>
-            <img src='`+ g_list_pokemon.filter((e) => e.pokedexId == (pokemon_to_show.evolution.pre[0].pokedexId))[0].sprites.regular +`'  
-            onclick='show_pokemons_details(`+ pokemon_to_show.evolution.pre[0].pokedexId +`)' class='images_evolution'/>
-            <p>`+ pokemon_to_show.evolution.pre[1].name +`</p>
-            <img src='`+ g_list_pokemon.filter((e) => e.pokedexId == (pokemon_to_show.evolution.pre[1].pokedexId))[0].sprites.regular +`'  
-            onclick='show_pokemons_details(`+ pokemon_to_show.evolution.pre[1].pokedexId +`)' class='images_evolution'/>
-            </div>`;
-            // image cliquable rechargeant la fonction pour afficher l'évolution
-            $('#pokemon_details').append(evolution_precedente);  
-        }
-        else {
-            let evolution_precedente = `<div class='evolution'>
-            <h3>Evolution précédente : </h3> 
-            <p>`+ pokemon_to_show.evolution.pre[0].name +`</p>
-            <img src='`+ g_list_pokemon.filter((e) => e.pokedexId == (pokemon_to_show.evolution.pre[0].pokedexId))[0].sprites.regular +`'  
-            onclick='show_pokemons_details(`+ pokemon_to_show.evolution.pre[0].pokedexId +`)' class='images_evolution'/>
-            </div>`;
-            // image cliquable rechargeant la fonction pour afficher l'évolution
-            $('#pokemon_details').append(evolution_precedente);
-        }   
-    }
-
-    if (pokemon_to_show.evolution.next != null){
-        if (pokemon_to_show.evolution.next.length == 2) {
-            let evolution_suivante = `<div class='evolution'>
-            <h3>Evolutions suivantes : </h3>
-            <p>`+ pokemon_to_show.evolution.next[0].name +`</p> 
-            <img src='`+ g_list_pokemon.filter((e) => e.pokedexId == (pokemon_to_show.evolution.next[0].pokedexId))[0].sprites.regular +`'
-            onclick='show_pokemons_details(`+ pokemon_to_show.evolution.next[0].pokedexId +`)' class='images_evolution'/> 
-            <p>`+ pokemon_to_show.evolution.next[1].name +`</p>
-            <img src='`+ g_list_pokemon.filter((e) => e.pokedexId == (pokemon_to_show.evolution.next[1].pokedexId))[0].sprites.regular +`'
-            onclick='show_pokemons_details(`+ pokemon_to_show.evolution.next[1].pokedexId +`)' class='images_evolution'/>
-            </div>`;
-            $('#pokemon_details').append(evolution_suivante);
-        }
-        else {
-            let evolution_suivante = `<div class='evolution suivante'>
-            <h3>Evolution suivante : </h3>
-            <p>`+ pokemon_to_show.evolution.next[0].name +`</p>
-            <img src='`+ g_list_pokemon.filter((e) => e.pokedexId == (pokemon_to_show.evolution.next[0].pokedexId))[0].sprites.regular +`'
-            onclick='show_pokemons_details(`+ pokemon_to_show.evolution.next[0].pokedexId +`)' class='images_evolution'/>
-            </div>`;
-            $('#pokemon_details').append(evolution_suivante);  
-        }
-    }
 }
 
-function show_pokemons_reduct(p_id) {
-    var pokemon_to_show = g_list_pokemon.filter((e) => e.pokedexId==p_id)[0];
-    console.log(pokemon_to_show);
-    let pokemon_reduct = template_reduct_pokemon(pokemon_to_show);
-    $('#pokemon_reduct').html(pokemon_reduct);
-}
 
-function template_reduct_pokemon(pokemon_to_show) {
-    // création de 2 versions en fonction du nombre de types des pokémons
-    if (pokemon_to_show.types.length == 2) {
-        let pokemon_template = `<div class='pokemon_description'>
-        <img src='`+ pokemon_to_show.sprites.regular +`' class='image_pokemon'/> 
-        <h3>Nom : `+ pokemon_to_show.name.fr +`</h3>
-        <p>Numéro : `+ pokemon_to_show.pokedexId +`</p>
-        <p>Types : `+ pokemon_to_show.types[0].name +` / `+ pokemon_to_show.types[1].name +` </p> 
-        <img src='`+ pokemon_to_show.types[0].image +`' class='image_type'/>
-        <img src='`+ pokemon_to_show.types[1].image +`' class='image_type'/>
-        <p>Génération : `+ pokemon_to_show.generation +`</p>
-        </div>`;
-        return pokemon_template;
-    }
-    else {
-        let pokemon_template = `<div class='pokemon_description'>
-        <img src='`+ pokemon_to_show.sprites.regular +`' class='image_pokemon'/> 
-        <h3>Nom : `+ pokemon_to_show.name.fr +`</h3>
-        <p>Numéro : `+ pokemon_to_show.pokedexId +`</p>
-        <p>Type : `+ pokemon_to_show.types[0].name +`</p> 
-        <img src='`+ pokemon_to_show.types[0].image +`' class='image_type'/> 
-        <p>Génération : `+ pokemon_to_show.generation +`</p>
-        </div>`;
-        return pokemon_template;
-    }
-}
 
 
 
 
 // fonctions : formulaire de recherche
 $(document).ready(function(){
-    $("#button_go").click(function() {
+    $("#button_submit").click(function() {
         let search = document.querySelector('#searchbar').value;
         console.log(search);
-        console.log(option);
         let search_tab = [];
         console.log(search_tab);
         const regex = new RegExp(search);
-        search_tab = g_list_pokemon.filter((e)=> regex.test(e.name.fr));
+        search_tab = g_produits_db.filter((e)=> regex.test(e.nom));
         console.log(search_tab);
         let list_results=[];
         $('#search_results_list').html('');
@@ -365,14 +263,11 @@ $(document).ready(function(){
         }
         else {
             for (let i=0; i<search_tab.length; i++) {
-                list_results = `<li onclick='show_pokemons_details(` + search_tab[i].pokedexId + `)' 
-                class='pokemon_name'>` + search_tab[i].name.fr + `</li>`;
+                list_results = `<li onclick='show_selling_shops(` + search_tab[i].id + `)' 
+                class='product_name'>` + search_tab[i].nom + `</li>`;
                 $('#search_results_list').append(list_results);
             }
         }
-
-        $('#pokemon_details').show();
-        $('#pokemon_reduct').hide();
 
         //éviter le rechargement de la page et de la console lors de la soumission du formulaire
         return false;
@@ -403,6 +298,6 @@ function display_sections(num) {
 
 
 // init functions : lancées au démarrage après la requête fetch
-get_pokemon(get_list_gen, get_list_type);
+order_products();
 
 display_sections(1);
