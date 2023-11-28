@@ -1,0 +1,23 @@
+header {
+    background-color:rgb(82, 198, 72);
+    padding:5%;
+    display : flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+#menu{
+    display: flex;
+    flex-direction: row;
+    min-width: 60px;
+    list-style-type: none;
+    justify-content: space-between;
+    }
+
+.menu_link{
+    padding:20px;
+}
+    
+.menu_link:hover{
+    color: rgb(255, 255, 255);
+}
