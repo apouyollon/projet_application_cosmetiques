@@ -1,3 +1,5 @@
+// Code bon jusqu'à ligne 140 et de ligne 245 à la fin
+
 //base de données: tableau en variables globales
 let g_produits_db = [
 {
@@ -5,6 +7,7 @@ let g_produits_db = [
     "marque":"Dior",
     "type":"shampoing",
     "magasins":[1,2,3,4],
+    "favori":false,
     "id":1
 },
 {
@@ -12,27 +15,31 @@ let g_produits_db = [
     "marque":"Dior",
     "type":"shampoing",
     "magasins":[1,2,4],
+    "favori":false,
     "id":2
 },
 {
-    "nom":"Rouge-à-lèvres carmin",
+    "nom":"Eau de roses carmin",
     "marque":"Fancy Beauty",
-    "type":"rouge-à-lèvres",
+    "type":"eau de roses",
     "magasins":[2,4,5],
+    "favori":false,
     "id":3
 },
 {
-    "nom":"Rouge-à-lèvres passion",
+    "nom":"Eau de roses passion",
     "marque":"Fancy Beauty",
-    "type":"rouge-à-lèvres",
+    "type":"eau de roses",
     "magasins":[1,3,5],
+    "favori":false,
     "id":4
 },
 {
-    "nom":"Rouge-à-lèvres cerise",
+    "nom":"Eau de roses cerise",
     "marque":"Dior",
-    "type":"rouge-à-lèvres",
+    "type":"eau de roses",
     "magasins":[2,3],
+    "favori":false,
     "id":5
 },
 {
@@ -40,6 +47,7 @@ let g_produits_db = [
     "marque":"Yves Rocher",
     "type":"parfum",
     "magasins":[1,2,3,4,5],
+    "favori":false,
     "id":6
 },
 {
@@ -47,6 +55,7 @@ let g_produits_db = [
     "marque":"Yves Rocher",
     "type":"parfum",
     "magasins":[1,2,5],
+    "favori":false,
     "id":7
 },
 {
@@ -54,6 +63,7 @@ let g_produits_db = [
     "marque":"Fancy Beauty",
     "type":"parfum",
     "magasins":[3,4,5],
+    "favori":false,
     "id":8
 },
 {
@@ -61,6 +71,7 @@ let g_produits_db = [
     "marque":"Fancy Beauty",
     "type":"parfum",
     "magasins":[1,3,4],
+    "favori":false,
     "id":9
 },
 {
@@ -68,6 +79,7 @@ let g_produits_db = [
     "marque":"Dior",
     "type":"parfum",
     "magasins":[4,5],
+    "favori":false,
     "id":10
 }
 ];
@@ -100,6 +112,9 @@ let g_magasins_db = [
 }
 ];
 
+//Ajoute les produits où favori=true
+let g_produits_clients = [];
+
 
 let g_list_marque = [];
 let g_list_type = [];
@@ -107,24 +122,18 @@ let g_list_type = [];
 
 // fonctions get_list_ : obtenir les différents types et générations
 function order_products() {
-    // console.log(p_tab_pokemon);
-    // création d'un tableau intermédiaire ne contenant que le champs génération
-    var interim_gen_tab = [];
-    for (let i=0; i<p_tab_pokemon.length; i++) {
-        interim_gen_tab.push(p_tab_pokemon[i].generation);
+    var interim_marque_tab = [];
+    for (let i=0; i<g_produits_db.length; i++) {
+        interim_marque_tab.push(g_produits_db[i].marque);
     }
     // console.log(interim_gen_tab);
-    g_list_marque = remove_duplicates_in_tab(interim_gen_tab);
+    g_list_marque = remove_duplicates_in_tab(interim_marque_tab);
     // remove_duplicates_in_tab renvoie un nouveau tableau (tab_no_duplicates)
     console.log(g_list_marque);
-    show_list_gen();
+    show_list_marque();
     var interim_type_tab = [];
-    for (let i=0; i<p_tab_pokemon.length; i++) {
-        // création d'un deuxième tableau pour parcourir plusieurs éléments
-        var type_array = p_tab_pokemon[i].types;
-        for (let j=0; j<type_array.length; j++) {
-            interim_type_tab.push(type_array[j].name);
-        }
+    for (let i=0; i<g_produits_db.length; i++) {
+        interim_marque_tab.push(g_produits_db[i].type);
     }
     g_list_type = remove_duplicates_in_tab(interim_type_tab);
     console.log(g_list_type);
@@ -150,7 +159,7 @@ function remove_duplicates_in_tab(p_tab){
 
 
 // fonctions show_list_ : permettent d'afficher les listes et les pokémons correspondants
-function show_list_gen() {
+function show_list_marque() {
     // affiche une liste contenant toutes les générations de pokemon
     for (let i=0; i<g_list_marque.length; i++){
         let list_gen_elem = `<li onclick='show_pokemons_in_list_gen(`+g_list_marque[i]+`)' 
