@@ -9,7 +9,7 @@
     </head>
     <body>
         <header>
-            <h1>Pokédex</h1>
+            <h1>Refill'app</h1>
             <nav>
                 <ul id="menu">
                     <li class="menu_link" onclick="display_sections(1)">Accueil</li>
@@ -23,12 +23,17 @@
 
                 <label for="searchbar">Rechercher un cosmétique rechargeable</label>
                 <input type="search" name="searchbar" placeholder="Nom du produit..." id="searchbar" required>
-                <select name="searchselect" id="searchselect"></select>
                 <button  onclick="recherche_produit()">Valider</button>
             <ul id="search_results_list"></ul>
+        </section>
 
         <section id="produits">
             <h2>Nos marques partenaires</h2>
+            <ul id="list_marques"></ul>
+        </section>
+
+        <section id="mon_compte">
+            <h2>Mon compte</h2>
             <ul id="list_marques"></ul>
         </section>
         
