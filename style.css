@@ -21,3 +21,14 @@ header {
 .menu_link:hover{
     color: rgb(255, 255, 255);
 }
+
+.fiche {
+    background-color: rgb(170, 255, 186);
+    padding:3%;
+    width: 30%;
+    margin :2%;
+}
+
+.fiche:hover {
+    background-color: rgb(132, 255, 154);
+}

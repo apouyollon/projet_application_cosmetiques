@@ -190,7 +190,8 @@ function fiche_produit(balise, produit) {
         txt_fav = "Ajouter aux favoris"
     }
 
-    $(balise).append("<div class='fiche'><h2>" + produit.nom + "</h2><h1>Marque : " + produit.marque + "</h1><button id='fav_" + produit.id + "' onclick='favori(" + produit.id + ")'>" + txt_fav + "</button></div>")
+    // ajouter une fonction pour afficher les différents magasins quand une div fiche est cliquée
+    $(balise).append("<div class='fiche'><p>" + produit.nom + "</p><p>Marque : " + produit.marque + "</p><button id='fav_" + produit.id + "' onclick='favori(" + produit.id + ")'>" + txt_fav + "</button></div>")
 
 }
 
@@ -225,12 +226,12 @@ function show_list_marque() {
     }
     // créer les différentes listes de pokemons
     for (let i=0; i<=g_list_marque.length; i++){
-        var list_gen_pokemons = g_list_pokemon.filter(e=>e.marque == g_list_marque[i]);
-        console.log(list_gen_pokemons);
-        for (let j=0; j<list_gen_pokemons.length; j++){
-            let pokemon_gen_elem = `<li onclick='show_pokemons_details(` + list_gen_pokemons[j].pokedexId + `)' 
-            class='pokemon_name'>` + list_gen_pokemons[j].name.fr + `</li>`;
-            $('#generation_'+ g_list_marque[i]).append(pokemon_gen_elem).hide();
+        var all_types_in_mark = g_produits_db.filter(e=>e.marque == g_list_marque[i]);
+        console.log(all_types_in_mark);
+        for (let j=0; j<all_types_in_mark.length; j++){
+            let marque_type_elem = `<li onclick='fiche_produit(` + all_types_in_mark[j].id + `)' 
+            class='marque_product_type'>` + all_types_in_mark[j].type + `</li>`;
+            $('#'+ g_list_marque[i]).append(marque_type_elem).hide();
         }
     }
 }
@@ -238,12 +239,12 @@ function show_list_marque() {
 function show_product_type(p_marque) {
     //affiche les noms des pokemons d'une génération précise
     for (let i=0; i<g_list_marque.length; i++){
-        // ne garder affichée qu'une génération à la fois     
+    
         if (g_list_marque[i] == p_marque) {
-            $('#generation_' + g_list_marque[i]).slideToggle(750);
+            $('#' + g_list_marque[i]).slideToggle(750);
         } 
         else {
-            $('#generation_' + g_list_marque[i]).slideUp(750);
+            $('#' + g_list_marque[i]).slideUp(750);
         }
     }    
 }
