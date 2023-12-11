@@ -135,14 +135,14 @@ function order_products() {
     g_list_marque = remove_duplicates_in_tab(interim_marque_tab);
     // remove_duplicates_in_tab renvoie un nouveau tableau (tab_no_duplicates)
     console.log(g_list_marque);
-    show_list_marque();
+
     var interim_type_tab = [];
     for (let j=0; j<g_produits_db.length; j++) {
-        //interim_marque_tab.push(g_produits_db[i].type);
+        interim_type_tab.push(g_produits_db[j].type);
     }
     g_list_type = remove_duplicates_in_tab(interim_type_tab);
     console.log(g_list_type);
-    show_list_type();
+    show_list_marque();
 }
 
 function remove_duplicates_in_tab(p_tab){
@@ -170,7 +170,7 @@ function recherche_produit() {
 
         liste.forEach((produit) => {
 
-            $("#search_results_list").append("<li>" + produit.nom + "</li>");
+            $("#search_results_list").append("<li>" + produit.nom + " - " + produit.marque + "</li>");
 
         })
 
@@ -186,20 +186,19 @@ function recherche_produit() {
 function show_list_marque() {
     // affiche une liste contenant toutes les générations de pokemon
     for (let i=0; i<g_list_marque.length; i++){
-        let list_marque_elem = `<li onclick='show_poroduct_type(`+g_list_marque[i]+`)' 
+        let list_marque_elem = `<li onclick='show_product_type(`+g_list_marque[i]+`)' 
         class='list_box'>` + g_list_marque[i] + `<ul id='` + g_list_marque[i]+ `'></ul></li>`;
-        $('#list_gen').append(list_marque_elem);
+        $('#list_marques').append(list_marque_elem);
     }
     // créer les différentes listes de pokemons
     for (let i=0; i<=g_list_marque.length; i++){
-        //var list_gen_pokemons = g_list_pokemon.filter(e=>e.generation == g_list_marque[i]);
-        // console.log(list_gen_pokemons);
-        //for (let j=0; j<list_gen_pokemons.length; j++){
-            //let pokemon_gen_elem = `<li onclick='show_pokemons_details(` + list_gen_pokemons[j].pokedexId + `)' 
-            //class='pokemon_name'>` + list_gen_pokemons[j].name.fr + `</li>`;
-            // Listes pokemons cachées par défaut
-            //$('#generation_'+ g_list_marque[i]).append(pokemon_gen_elem).hide();
-        //}
+        var list_gen_pokemons = g_list_pokemon.filter(e=>e.marque == g_list_marque[i]);
+        console.log(list_gen_pokemons);
+        for (let j=0; j<list_gen_pokemons.length; j++){
+            let pokemon_gen_elem = `<li onclick='show_pokemons_details(` + list_gen_pokemons[j].pokedexId + `)' 
+            class='pokemon_name'>` + list_gen_pokemons[j].name.fr + `</li>`;
+            $('#generation_'+ g_list_marque[i]).append(pokemon_gen_elem).hide();
+        }
     }
 }
 
