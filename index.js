@@ -187,7 +187,7 @@ function fiche_produit(balise, produit) {
         txt_fav = "Retirer des favoris";
     }
     else {
-        txt_fav = "Ajouter aux favoris"
+        txt_fav = "Ajouter aux favoris";
     }
 
     $(balise).append("<div class='fiche'><h2>" + produit.nom + "</h2><h1>Marque : " + produit.marque + "</h1><button id='fav_" + produit.id + "' onclick='favori(" + produit.id + ")'>" + txt_fav + "</button></div>")
@@ -213,7 +213,21 @@ function favori(id) {
 
 }
 
+function liste_fav() {
 
+    $("#list_produit_fav").html("");
+    let liste = g_produits_db.filter((produit) => (produit.favori));
+    if(liste.length > 0) {
+
+        liste.forEach((produit) => {
+
+            fiche_produit("#list_produit_fav", produit);
+
+        })
+
+    }
+
+}
 
 // fonctions show_list_ : permettent d'afficher les listes et les pokémons correspondants
 function show_list_marque() {
@@ -345,10 +359,18 @@ function display_sections(num) {
     if (num == 1) {
         $('#accueil').show();
         $('#produits').hide();
+        $('#mon_compte').hide();
     }
     else if (num == 2) {
         $('#accueil').hide();
         $('#produits').show();
+        $('#mon_compte').hide();
+    }
+    else {
+        $('#accueil').hide();
+        $('#produits').hide();
+        $('#mon_compte').show();
+        liste_fav();
     }
 }
 
