@@ -211,6 +211,7 @@ function favori(id) {
         }
 
     }
+    liste_fav();
 
 }
 
@@ -234,23 +235,29 @@ function liste_fav() {
 function show_list_marque() {
     // affiche une liste contenant toutes les générations de pokemon
     for (let i=0; i<g_list_marque.length; i++){
-        let list_marque_elem = `<li onclick='show_product_type(`+g_list_marque[i]+`)' 
+        let list_marque_elem = `<li onclick='show_list_type(`+g_list_marque[i]+`)' 
         class='list_box'>` + g_list_marque[i] + `<ul id='` + g_list_marque[i]+ `'></ul></li>`;
         $('#list_marques').append(list_marque_elem);
     }
     // créer les différentes listes de pokemons
-    for (let i=0; i<=g_list_marque.length; i++){
-        var all_types_in_mark = g_produits_db.filter(e=>e.marque == g_list_marque[i]);
-        console.log(all_types_in_mark);
-        for (let j=0; j<all_types_in_mark.length; j++){
-            let marque_type_elem = `<li onclick='fiche_produit(` + all_types_in_mark[j].id + `)' 
-            class='marque_product_type'>` + all_types_in_mark[j].type + `</li>`;
+    for (let i=0; i<g_list_marque.length; i++){
+        var all_types_in_marque = g_produits_db.filter(e=>e.marque == g_list_marque[i]);
+        var interim_tab = [];
+        console.log(all_types_in_marque);
+        for (let h=0; h<all_types_in_marque.length; h++){
+            interim_tab.push(all_types_in_marque[h].type);
+        }
+        var tab_types_in_marque = remove_duplicates_in_tab(interim_tab);
+        console.log(tab_types_in_marque);
+        for (let j=0; j<tab_types_in_marque.length; j++){
+            let marque_type_elem = `<li onclick='show_products_in_type(` + tab_types_in_marque[j] + `, ` + g_list_marque[j] + `)' 
+            class='marque_product_type'>` + tab_types_in_marque[j].type + `</li>`;
             $('#'+ g_list_marque[i]).append(marque_type_elem).hide();
         }
     }
 }
 
-function show_product_type(p_marque) {
+function show_list_type(p_marque) {
     //affiche les noms des pokemons d'une génération précise
     for (let i=0; i<g_list_marque.length; i++){
     
@@ -263,7 +270,7 @@ function show_product_type(p_marque) {
     }    
 }
 
-function show_list_type() {
+function show_products_in_type(p_type, p_marque) {
     // affiche une liste contenant toutes les générations de pokemon
     for (let i=0; i<g_list_type.length; i++){
         let list_type_elem = `<li onclick='show_pokemons_in_list_type("`+ g_list_type[i] +`")' 
