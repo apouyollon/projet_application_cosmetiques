@@ -88,26 +88,31 @@ let g_magasins_db = [
 {
     "nom":"Monoprix",
     "distance": 0.4,
+    "favori":false,
     "id": 1
 },
 {
     "nom":"Yves Rocher",
     "distance": 12.2,
+    "favori":false,
     "id": 2
 },
 {
     "nom":"Carrefour",
     "distance": 5.6,
+    "favori":false,
     "id": 3
 },
 {
     "nom":"Multiprix",
     "distance": 7.3,
+    "favori":false,
     "id": 4
 },
 {
     "nom":"Soft",
     "distance": 2.9,
+    "favori":false,
     "id": 5
 }
 ];
@@ -132,7 +137,7 @@ function order_products() {
     console.log(g_list_marque);
     show_list_marque();
     var interim_type_tab = [];
-    for (let i=0; i<g_produits_db.length; i++) {
+    for (let j=0; j<g_produits_db.length; j++) {
         interim_marque_tab.push(g_produits_db[i].type);
     }
     g_list_type = remove_duplicates_in_tab(interim_type_tab);
@@ -162,9 +167,9 @@ function remove_duplicates_in_tab(p_tab){
 function show_list_marque() {
     // affiche une liste contenant toutes les générations de pokemon
     for (let i=0; i<g_list_marque.length; i++){
-        let list_gen_elem = `<li onclick='show_pokemons_in_list_gen(`+g_list_marque[i]+`)' 
-        class='list_box'>Génération ` + g_list_marque[i] + `<ul id='generation_` + g_list_marque[i]+ `'></ul></li>`;
-        $('#list_gen').append(list_gen_elem);
+        let list_marque_elem = `<li onclick='show_poroduct_type(`+g_list_marque[i]+`)' 
+        class='list_box'>` + g_list_marque[i] + `<ul id='` + g_list_marque[i]+ `'></ul></li>`;
+        $('#list_gen').append(list_marque_elem);
     }
     // créer les différentes listes de pokemons
     for (let i=0; i<=g_list_marque.length; i++){
@@ -179,11 +184,11 @@ function show_list_marque() {
     }
 }
 
-function show_pokemons_in_list_gen(p_generation) {
+function show_product_type(p_marque) {
     //affiche les noms des pokemons d'une génération précise
     for (let i=0; i<g_list_marque.length; i++){
         // ne garder affichée qu'une génération à la fois     
-        if (g_list_marque[i] == p_generation) {
+        if (g_list_marque[i] == p_marque) {
             $('#generation_' + g_list_marque[i]).slideToggle(750);
         } 
         else {
@@ -241,12 +246,8 @@ function show_pokemons_in_list_type(p_type) {
 
 // fonctions show_pokemons_ : affichent les fiches d'un pokémon dans une div
 function show_selling_shops(p_id) {
-    var pokemon_to_show = g_list_pokemon.filter((e) => e.pokedexId==p_id)[0];
-    console.log(pokemon_to_show);
-
-    let pokemon_detail = template_reduct_pokemon(pokemon_to_show);
-
-    $('#pokemon_details').html(pokemon_detail);
+    var selling_shops = g_produits_db.filter((e)=>e.magasins.filter((x) => p_id ));
+    console.log(selling_shops);
 }
 
 
@@ -293,11 +294,10 @@ function display_sections(num) {
     if (num == 1) {
         $('#accueil').show();
         $('#produits').hide();
-        $('#type').hide();
     }
     else if (num == 2) {
         $('#accueil').hide();
-        $('#generation').show();
+        $('#produits').show();
     }
 }
 
