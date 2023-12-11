@@ -21,12 +21,10 @@
         <section id="accueil">
             <h2>Accueil</h2>
 
-            <form method="GET">
                 <label for="searchbar">Rechercher un cosmétique rechargeable</label>
                 <input type="search" name="searchbar" placeholder="Nom du produit..." id="searchbar" required>
-                <select name="searchselect" id="searchselect">
-                <button type="submit" id="button_submit">Valider</button>
-            </form>
+                <select name="searchselect" id="searchselect"></select>
+                <button  onclick="recherche_produit()">Valider</button>
             <ul id="search_results_list"></ul>
 
         <section id="produits">

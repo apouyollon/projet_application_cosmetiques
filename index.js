@@ -138,7 +138,7 @@ function order_products() {
     show_list_marque();
     var interim_type_tab = [];
     for (let j=0; j<g_produits_db.length; j++) {
-        interim_marque_tab.push(g_produits_db[i].type);
+        //interim_marque_tab.push(g_produits_db[i].type);
     }
     g_list_type = remove_duplicates_in_tab(interim_type_tab);
     console.log(g_list_type);
@@ -157,7 +157,26 @@ function remove_duplicates_in_tab(p_tab){
     return tab_no_duplicates;
 }
 
+function recherche_produit() {
 
+    $("#search_results_list").html("");
+
+    let txt = document.getElementById('searchbar').value;
+    txt = txt.toLowerCase();
+
+    let liste = g_produits_db.filter((produit) => (produit["nom"].toLowerCase().includes(txt)));
+    
+    if(liste.length != 0) {
+
+        liste.forEach((produit) => {
+
+            $("#search_results_list").append("<li>" + produit.nom + "</li>");
+
+        })
+
+    }
+
+}
 
 
 
@@ -173,14 +192,14 @@ function show_list_marque() {
     }
     // créer les différentes listes de pokemons
     for (let i=0; i<=g_list_marque.length; i++){
-        var list_gen_pokemons = g_list_pokemon.filter(e=>e.generation == g_list_marque[i]);
+        //var list_gen_pokemons = g_list_pokemon.filter(e=>e.generation == g_list_marque[i]);
         // console.log(list_gen_pokemons);
-        for (let j=0; j<list_gen_pokemons.length; j++){
-            let pokemon_gen_elem = `<li onclick='show_pokemons_details(` + list_gen_pokemons[j].pokedexId + `)' 
-            class='pokemon_name'>` + list_gen_pokemons[j].name.fr + `</li>`;
+        //for (let j=0; j<list_gen_pokemons.length; j++){
+            //let pokemon_gen_elem = `<li onclick='show_pokemons_details(` + list_gen_pokemons[j].pokedexId + `)' 
+            //class='pokemon_name'>` + list_gen_pokemons[j].name.fr + `</li>`;
             // Listes pokemons cachées par défaut
-            $('#generation_'+ g_list_marque[i]).append(pokemon_gen_elem).hide();
-        }
+            //$('#generation_'+ g_list_marque[i]).append(pokemon_gen_elem).hide();
+        //}
     }
 }
 
@@ -208,15 +227,15 @@ function show_list_type() {
     for (let i=0; i<g_list_type.length; i++){
         var list_type_pokemons = [];
         // pour chaque type, comparer chaque pokemon
-        for (let k=0; k<g_list_pokemon.length; k++){
+        //for (let k=0; k<g_list_pokemon.length; k++){
             // pour chaque pokemon, récuérer chaque type
-            var pokemon_type_array = g_list_pokemon[k].types;
+            //var pokemon_type_array = g_list_pokemon[k].types;
             // ajouter au tableau list_type_pokemons ceux correspondant à g_list_type[i]
-            var interim_list_type = pokemon_type_array.filter(e=>e.name == g_list_type[i]);
-            if (interim_list_type.length >= 1) {
-                list_type_pokemons.push(g_list_pokemon[k]);
-            }
-        }
+            //var interim_list_type = pokemon_type_array.filter(e=>e.name == g_list_type[i]);
+            //if (interim_list_type.length >= 1) {
+                //list_type_pokemons.push(g_list_pokemon[k]);
+            //}
+        //}
         // console.log(list_type_pokemons);     
         for (let j=0; j<list_type_pokemons.length; j++){
             let pokemon_type_elem = `<li onclick='show_pokemons_details(` + list_type_pokemons[j].pokedexId + `)' 
