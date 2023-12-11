@@ -169,8 +169,8 @@ function recherche_produit() {
     if(liste.length != 0) {
 
         liste.forEach((produit) => {
-
-            $("#search_results_list").append("<li>" + produit.nom + "</li>");
+            
+            fiche_produit("#search_results_list", produit);
 
         })
 
@@ -178,7 +178,39 @@ function recherche_produit() {
 
 }
 
+function fiche_produit(balise, produit) {
 
+    let txt_fav = "";
+
+    if(produit.favori) {
+        txt_fav = "Retirer des favoris";
+    }
+    else {
+        txt_fav = "Ajouter aux favoris"
+    }
+
+    $(balise).append("<div class='fiche'><h2>" + produit.nom + "</h2><h1>Marque : " + produit.marque + "</h1><button id='fav_" + produit.id + "' onclick='favori(" + produit.id + ")'>" + txt_fav + "</button></div>")
+
+}
+
+function favori(id) {
+
+    let liste = g_produits_db.filter((produit) => (produit.id == id));
+    if(liste.length == 1) {
+
+        let produit = liste[0];
+        if(produit.favori) {
+            produit.favori = false;
+            $("#fav_" + id).html("Ajouter aux favoris");
+        }
+        else {
+            produit.favori = true;
+            $("#fav_" + id).html("Retirer des favoris");
+        }
+
+    }
+
+}
 
 
 
