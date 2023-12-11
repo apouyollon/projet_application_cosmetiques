@@ -191,13 +191,64 @@ function fiche_produit(balise, produit) {
     }
 
     // ajouter une fonction pour afficher les différents magasins quand une div fiche est cliquée
-    $(balise).append("<div class='fiche'><p>" + produit.nom + "</p><p>Marque : " + produit.marque + "</p><button id='fav_" + produit.id + "' onclick='favori(" + produit.id + ")'>" + txt_fav + "</button></div>")
+    $(balise).append("<div class='fiche' onclick='liste_magasins(" + produit.id + ")'><p>" + produit.nom + "</p><p>Marque : " + produit.marque + "</p><button id='fav_" + produit.id + "' onclick='favori(" + produit.id + ")'>" + txt_fav + "</button></div>")
 
 }
 
-function favori(id) {
+function fiche_magasin(balise, magasin) {
+
+    let txt_fav = "";
+
+    if(magasin.favori) {
+        txt_fav = "Retirer des favoris";
+    }
+    else {
+        txt_fav = "Ajouter aux favoris";
+    }
+
+    // ajouter une fonction pour afficher les différents magasins quand une div fiche est cliquée
+    $(balise).append("<div class='fiche'><p>" + magasin.nom + "</p><button id='fav_" + magasin.id + "' onclick='favori(" + magasin.id + ", false)'>" + txt_fav + "</button></div>")
+
+}
+
+function compareMagasin(a, b) {
+    if(a.distance > b.distance) {
+      return 1;
+    }
+    else if(a.distance < b.distance) {
+      return -1
+    }
+    return 0;
+}
+
+function liste_magasins(id) {
 
     let liste = g_produits_db.filter((produit) => (produit.id == id));
+    if(liste.length == 1) {
+
+        let produit = liste[0];
+
+        let liste_magasins = g_magasins_db;
+
+        liste_magasins.sort(compareMagasin);
+
+        liste_magasins.forEach((magasin) => {
+            fiche_magasin("#search_results_list", magasin);
+        })
+
+    }
+
+}
+
+function favori(id, isProduit = true) {
+
+    let liste;
+    if(isProduit) {
+        liste = g_produits_db.filter((produit) => (produit.id == id));
+    }
+    else {
+        liste = g_magasins_db.filter((magasin) => (magasin.id == id));
+    }
     if(liste.length == 1) {
 
         let produit = liste[0];
