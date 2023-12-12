@@ -274,6 +274,12 @@ function liste_magasins(id) {
 
 }
 
+function showSucces() {
+
+    $("#accueil").addClass("");
+
+}
+
 function favori(id, isProduit = true) {
 
     let liste;
@@ -309,6 +315,17 @@ function liste_fav() {
         liste.forEach((produit) => {
 
             fiche_produit("#list_produit_fav", produit);
+
+        })
+
+    }
+
+    let liste_m = g_magasins_db.filter((magasin) => (magasin.favori));
+    if(liste_m.length > 0) {
+
+        liste_m.forEach((magasin) => {
+
+            fiche_magasin("#list_produit_fav", magasin);
 
         })
 
