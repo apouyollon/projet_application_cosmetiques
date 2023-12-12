@@ -300,78 +300,44 @@ function show_list_marque() {
     for (let i=0; i<g_list_marque.length; i++){
         var all_types_in_marque = g_produits_db.filter(e=>e.marque == g_list_marque[i]);
         var interim_tab = [];
-        console.log(all_types_in_marque);
         for (let h=0; h<all_types_in_marque.length; h++){
             interim_tab.push(all_types_in_marque[h].type);
         }
         var tab_types_in_marque = remove_duplicates_in_tab(interim_tab);
-        console.log(tab_types_in_marque);
         for (let j=0; j<tab_types_in_marque.length; j++){
             let marque_type_elem = `<li onclick='show_products_in_type("` + tab_types_in_marque[j] + 
-            `", "` + g_list_marque[j] + `")' 
+            `", "` + g_list_marque[j] + `", "` + tab_types_in_marque[j].replace(/ /g, '_') + `
+            ", "` + g_list_marque_id[j] + `")' 
             class='marque_product_type'>` + tab_types_in_marque[j] + `
-            <ul id='products_` + tab_types_in_marque[j] + `'></ul></li>`;
-            console.log(g_list_marque_id[i]);
+            <ul id='products_` + tab_types_in_marque[j].replace(/ /g, '_') + `_` + g_list_marque_id[j] + `'>
+            </ul></li>`;
             $('#'+ g_list_marque_id[i]).append(marque_type_elem).hide();
         }
     }
 }
 
 function show_list_type(p_marque) {
-    console.log(p_marque);
-    //affiche les noms des pokemons d'une génération précise
     for (let i=0; i<g_list_marque.length; i++){
     
         if (g_list_marque_id[i] == p_marque) {
-            $('#' + g_list_marque_id[i]).slideToggle(500);
+            $('#' + g_list_marque_id[i]).show();
         } 
         else {
-            $('#' + g_list_marque_id[i]).slideUp(500);
+            $('#' + g_list_marque_id[i]).hide();
         }
     }    
 }
 
-function show_products_in_type(p_type, p_marque) {
+function show_products_in_type(p_type, p_marque, p_id_type, p_id_marque) {
     var all_products_in_type = g_produits_db.filter(e => e.type == p_type && e.marque == p_marque);
     console.log(all_products_in_type);
-    for (let i=0; i<g_list_type.length; i++){
-        let list_type_elem = `<li onclick='show_pokemons_in_list_type("`+ g_list_type[i] +`")' 
-        class='list_box'>Type ` + g_list_type[i] + `<ul id='type_` + g_list_type[i]+ `'></ul></li>`;
-        $('#list_type').append(list_type_elem);
-    }
-    // récupérer chaque type
-    for (let i=0; i<g_list_type.length; i++){
-        var list_type_pokemons = [];
-        // pour chaque type, comparer chaque pokemon
-        //for (let k=0; k<g_list_pokemon.length; k++){
-            // pour chaque pokemon, récuérer chaque type
-            //var pokemon_type_array = g_list_pokemon[k].types;
-            // ajouter au tableau list_type_pokemons ceux correspondant à g_list_type[i]
-            //var interim_list_type = pokemon_type_array.filter(e=>e.name == g_list_type[i]);
-            //if (interim_list_type.length >= 1) {
-                //list_type_pokemons.push(g_list_pokemon[k]);
-            //}
-        //}
-        // console.log(list_type_pokemons);     
-        for (let j=0; j<list_type_pokemons.length; j++){
-            let pokemon_type_elem = `<li onclick='show_pokemons_details(` + list_type_pokemons[j].pokedexId + `)' 
-            class='pokemon_name'>` + list_type_pokemons[j].name.fr + `</li>`;
-            $('#type_'+ g_list_type[i]).append(pokemon_type_elem).hide();
-        }
+    for (let i=0; i<all_products_in_type.length; i++){
+        let product_in_type = `<li onclick=' fiche_produit("#search_results_list", all_products_in_type[i])' 
+        class='products>` + all_products_in_type[i].nom + `</li>`;
+        console.log('#products_' + p_id_type + '_' + p_id_marque);
+        $('#products_' + p_id_type + '_' + p_id_marque).append(product_in_type);
     }
 }
-
-function show_pokemons_in_list_type(p_type) {
-    for (let i=0; i<g_list_type.length; i++){  
-        if (g_list_type[i] == p_type) {
-            $('#type_' + g_list_type[i]).slideToggle(750);
-        } 
-        else {
-            $('#type_' + g_list_type[i]).slideUp(750);
-        }
-    }    
-}
-
 
 
 
