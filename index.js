@@ -223,7 +223,7 @@ function fiche_magasin(balise, magasin) {
     }
 
     // ajouter une fonction pour afficher les différents magasins quand une div fiche est cliquée
-    $(balise).append("<div class='fiche'><p>" + magasin.nom + "</p><div class='div_fav' id='fav_" + magasin.id + "' onclick='favori(" + magasin.id + ", false)'>" + txt_fav + "</div></div>")
+    $(balise).append("<div class='fiche'><p>" + magasin.nom + "</p><p>" + magasin.distance + " km</p><div class='div_fav' id='fav_" + magasin.id + "' onclick='favori(" + magasin.id + ", false)'>" + txt_fav + "</div></div>")
 
 }
 
@@ -350,11 +350,9 @@ function show_list_marque() {
         }
         var tab_types_in_marque = remove_duplicates_in_tab(interim_tab);
         for (let j=0; j<tab_types_in_marque.length; j++){
-            let marque_type_elem = `<li onclick='show_products_in_type("` + tab_types_in_marque[j] + 
-            `", "` + g_list_marque[j] + `", "` + tab_types_in_marque[j].replace(/ /g, '_') + `
-            ", "` + g_list_marque_id[j] + `")' 
+            let marque_type_elem = `<li onclick='show_products_in_type("` + tab_types_in_marque[j] + `", "` + g_list_marque[i] + `", "` + tab_types_in_marque[j].replace(/ /g, '_') + `", "` + g_list_marque_id[i] + `")' 
             class='marque_product_type'>` + tab_types_in_marque[j] + `
-            <ul id='products_` + tab_types_in_marque[j].replace(/ /g, '_') + `_` + g_list_marque_id[j] + `'>
+            <ul id='products_` + tab_types_in_marque[j].replace(/ /g, '_') + `_` + g_list_marque_id[i] + `'>
             </ul></li>`;
             $('#'+ g_list_marque_id[i]).append(marque_type_elem).hide();
         }
@@ -379,8 +377,10 @@ function show_products_in_type(p_type, p_marque, p_id_type, p_id_marque) {
     for (let i=0; i<all_products_in_type.length; i++){
         let product_in_type = `<li onclick=' fiche_produit("#search_results_list", all_products_in_type[i])' 
         class='products>` + all_products_in_type[i].nom + `</li>`;
-        console.log('#products_' + p_id_type + '_' + p_id_marque);
-        $('#products_' + p_id_type + '_' + p_id_marque).append(product_in_type);
+        console.log(product_in_type);
+        let id_cible ='#products_' + p_id_type + '_' + p_id_marque;
+        $(id_cible).show();
+        $(id_cible).append(product_in_type);
     }
 }
 
