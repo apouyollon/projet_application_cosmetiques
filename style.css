@@ -23,20 +23,24 @@ header {
 }
 
 .fiche {
-    background-color: rgb(170, 255, 186);
+    background-color: #ff88b0;
+    box-shadow: 0 0 0.5em rgba(255, 255, 255, 0.3);
+    border-radius: 5px;
     padding:3%;
     width: 30%;
     margin :2%;
+    transition: 0.5s;
 }
 
 .fiche:hover {
-    background-color: rgb(132, 255, 154);
+    background-color: #fe9ebe;
+    transition: 0.5s;
 }
 
 footer nav svg {
 
     width: 4%;
-    margin-top: 1%;
+    margin-top: 0.6%;
 
 }
 
@@ -48,21 +52,22 @@ footer nav {
 
 }
 
-footer {
+footer nav {
 
     position: fixed;
-    height: 50px;
+    height: 10%;
     background-color: white;
-    border-radius: 5px 5px 0px 0px;
-    bottom: 0px;
-    left: 0px;
-    right: 0px;
+    border-radius: 5px;
+    bottom: 2%;
+    left: 2%;
+    right: 2%;
     margin-bottom: 0px;
 
 }
 
 body {
     margin-bottom:50px;
+    background-color: #ff8fb4;
 }
 
 #searchbar {

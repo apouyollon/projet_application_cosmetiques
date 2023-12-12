@@ -207,7 +207,7 @@ function fiche_produit(balise, produit) {
     }
 
     // ajouter une fonction pour afficher les différents magasins quand une div fiche est cliquée
-    $(balise).append("<div class='fiche' onclick='liste_magasins(" + produit.id + ")'><p>" + produit.nom + "</p><p>Marque : " + produit.marque + "</p><div class='div_fav' id='fav_" + produit.id + "' onclick='favori(" + produit.id + ")'>" + txt_fav + "</div></div>")
+    $(balise).append("<div class='fiche'><p onclick='liste_magasins(" + produit.id + ")'>" + produit.nom + "</p><p onclick='liste_magasins(" + produit.id + ")'>Marque : " + produit.marque + "</p><div class='div_fav' id='fav_" + produit.id + "' onclick='favori(" + produit.id + ")'>" + txt_fav + "</div></div>")
 
 }
 
@@ -239,6 +239,8 @@ function compareMagasin(a, b) {
 
 function liste_magasins(id) {
 
+    display_sections(1);
+
     $("#search_results_list").html("");
 
     let liste = g_produits_db.filter((produit) => (produit.id == id));
@@ -248,6 +250,8 @@ function liste_magasins(id) {
         let produit = liste[0];
 
         fiche_produit("#search_results_list", produit);
+
+        $("#search_results_list").append("<h3>Magasins proches</h3>")
 
         let liste_magasins = g_magasins_db.filter((magasin) => (produit.magasins.includes(magasin.id)));
 
@@ -284,11 +288,11 @@ function favori(id, isProduit = true) {
         let produit = liste[0];
         if(produit.favori) {
             produit.favori = false;
-            $("#fav_" + id).html("Ajouter aux favoris");
+            $("#fav_" + id).html(coeur);
         }
         else {
             produit.favori = true;
-            $("#fav_" + id).html("Retirer des favoris");
+            $("#fav_" + id).html(coeur_plein);
         }
 
     }
