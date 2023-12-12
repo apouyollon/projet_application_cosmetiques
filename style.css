@@ -32,3 +32,49 @@ header {
 .fiche:hover {
     background-color: rgb(132, 255, 154);
 }
+
+footer nav svg {
+
+    width: 4%;
+    margin-top: 1%;
+
+}
+
+footer nav {
+
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: nowrap;
+
+}
+
+footer {
+
+    position: fixed;
+    height: 50px;
+    background-color: white;
+    border-radius: 5px 5px 0px 0px;
+    bottom: 0px;
+    left: 0px;
+    right: 0px;
+    margin-bottom: 0px;
+
+}
+
+body {
+    margin-bottom:50px;
+}
+
+#searchbar {
+
+    border-radius: 10px;
+    border-width: 1px;
+    padding: 1%;
+
+}
+
+.div_fav svg{
+
+    width: 10%;
+
+}
