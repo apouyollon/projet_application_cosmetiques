@@ -125,7 +125,9 @@ let g_produits_clients = [];
 
 
 let g_list_marque = [];
+let g_list_marque_id = [];
 let g_list_type = [];
+let g_list_type_id = [];
 
 var wage = document.getElementById("searchbar");
 wage.addEventListener("keydown", function (e) {
@@ -145,6 +147,8 @@ function order_products() {
     g_list_marque = remove_duplicates_in_tab(interim_marque_tab);
     // remove_duplicates_in_tab renvoie un nouveau tableau (tab_no_duplicates)
     console.log(g_list_marque);
+    g_list_marque_id = g_list_marque.map(e => e.replace(/ /g, '_'));
+    console.log(g_list_marque_id);
 
     var interim_type_tab = [];
     for (let j=0; j<g_produits_db.length; j++) {
@@ -152,6 +156,8 @@ function order_products() {
     }
     g_list_type = remove_duplicates_in_tab(interim_type_tab);
     console.log(g_list_type);
+    g_list_type_id = g_list_type.map(e => e.replace(/ /g, '_'));
+    console.log(g_list_type_id);
     show_list_marque();
 }
 
@@ -310,8 +316,8 @@ function liste_fav() {
 function show_list_marque() {
     // affiche une liste contenant toutes les générations de pokemon
     for (let i=0; i<g_list_marque.length; i++){
-        let list_marque_elem = `<li onclick='show_list_type(`+g_list_marque[i]+`)' 
-        class='list_box'>` + g_list_marque[i] + `<ul id='` + g_list_marque[i]+ `'></ul></li>`;
+        let list_marque_elem = `<li onclick='show_list_type("` + g_list_marque_id[i] + `")' 
+        class='list_box'>` + g_list_marque[i] + `<ul id='` + g_list_marque_id[i] + `'></ul></li>`;
         $('#list_marques').append(list_marque_elem);
     }
     // créer les différentes listes de pokemons
@@ -325,28 +331,33 @@ function show_list_marque() {
         var tab_types_in_marque = remove_duplicates_in_tab(interim_tab);
         console.log(tab_types_in_marque);
         for (let j=0; j<tab_types_in_marque.length; j++){
-            let marque_type_elem = `<li onclick='show_products_in_type(` + tab_types_in_marque[j] + `, ` + g_list_marque[j] + `)' 
-            class='marque_product_type'>` + tab_types_in_marque[j].type + `</li>`;
-            $('#'+ g_list_marque[i]).append(marque_type_elem).hide();
+            let marque_type_elem = `<li onclick='show_products_in_type("` + tab_types_in_marque[j] + 
+            `", "` + g_list_marque[j] + `")' 
+            class='marque_product_type'>` + tab_types_in_marque[j] + `
+            <ul id='products_` + tab_types_in_marque[j] + `'></ul></li>`;
+            console.log(g_list_marque_id[i]);
+            $('#'+ g_list_marque_id[i]).append(marque_type_elem).hide();
         }
     }
 }
 
 function show_list_type(p_marque) {
+    console.log(p_marque);
     //affiche les noms des pokemons d'une génération précise
     for (let i=0; i<g_list_marque.length; i++){
     
-        if (g_list_marque[i] == p_marque) {
-            $('#' + g_list_marque[i]).slideToggle(750);
+        if (g_list_marque_id[i] == p_marque) {
+            $('#' + g_list_marque_id[i]).slideToggle(500);
         } 
         else {
-            $('#' + g_list_marque[i]).slideUp(750);
+            $('#' + g_list_marque_id[i]).slideUp(500);
         }
     }    
 }
 
 function show_products_in_type(p_type, p_marque) {
-    // affiche une liste contenant toutes les générations de pokemon
+    var all_products_in_type = g_produits_db.filter(e => e.type == p_type && e.marque == p_marque);
+    console.log(all_products_in_type);
     for (let i=0; i<g_list_type.length; i++){
         let list_type_elem = `<li onclick='show_pokemons_in_list_type("`+ g_list_type[i] +`")' 
         class='list_box'>Type ` + g_list_type[i] + `<ul id='type_` + g_list_type[i]+ `'></ul></li>`;
