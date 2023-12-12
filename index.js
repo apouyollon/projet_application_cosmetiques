@@ -117,6 +117,9 @@ let g_magasins_db = [
 }
 ];
 
+let coeur_plein = '<svg xmlns="http://www.w3.org/2000/svg" id="i-heart" viewBox="0 0 32 32" fill="red" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M4 16 C1 12 2 6 7 4 12 2 15 6 16 8 17 6 21 2 26 4 31 6 31 12 28 16 25 20 16 28 16 28 16 28 7 20 4 16 Z" id="id_101" style="stroke: rgb(255, 0, 0);"/></svg>';
+let coeur = '<svg xmlns="http://www.w3.org/2000/svg" id="i-heart" viewBox="0 0 32 32" fill="none" stroke="#000" stroke-linecap="round" stroke-linejoin="round" stroke-width="2"><path d="M4 16 C1 12 2 6 7 4 12 2 15 6 16 8 17 6 21 2 26 4 31 6 31 12 28 16 25 20 16 28 16 28 16 28 7 20 4 16 Z" id="id_101" style="stroke: rgb(255, 0, 0);"/></svg>';
+
 //Ajoute les produits où favori=true
 let g_produits_clients = [];
 
@@ -125,6 +128,13 @@ let g_list_marque = [];
 let g_list_marque_id = [];
 let g_list_type = [];
 let g_list_type_id = [];
+
+var wage = document.getElementById("searchbar");
+wage.addEventListener("keydown", function (e) {
+    if (e.code === "Enter") {  //checks whether the pressed key is "Enter"
+        recherche_produit();
+    }
+});
 
 
 // fonctions get_list_ : obtenir les différents types et générations
@@ -190,14 +200,14 @@ function fiche_produit(balise, produit) {
     let txt_fav = "";
 
     if(produit.favori) {
-        txt_fav = "Retirer des favoris";
+        txt_fav = coeur_plein;
     }
     else {
-        txt_fav = "Ajouter aux favoris";
+        txt_fav = coeur;
     }
 
     // ajouter une fonction pour afficher les différents magasins quand une div fiche est cliquée
-    $(balise).append("<div class='fiche' onclick='liste_magasins(" + produit.id + ")'><p>" + produit.nom + "</p><p>Marque : " + produit.marque + "</p><button id='fav_" + produit.id + "' onclick='favori(" + produit.id + ")'>" + txt_fav + "</button></div>")
+    $(balise).append("<div class='fiche' onclick='liste_magasins(" + produit.id + ")'><p>" + produit.nom + "</p><p>Marque : " + produit.marque + "</p><div class='div_fav' id='fav_" + produit.id + "' onclick='favori(" + produit.id + ")'>" + txt_fav + "</div></div>")
 
 }
 
@@ -206,14 +216,14 @@ function fiche_magasin(balise, magasin) {
     let txt_fav = "";
 
     if(magasin.favori) {
-        txt_fav = "Retirer des favoris";
+        txt_fav = coeur_plein;
     }
     else {
-        txt_fav = "Ajouter aux favoris";
+        txt_fav = coeur;
     }
 
     // ajouter une fonction pour afficher les différents magasins quand une div fiche est cliquée
-    $(balise).append("<div class='fiche'><p>" + magasin.nom + "</p><button id='fav_" + magasin.id + "' onclick='favori(" + magasin.id + ", false)'>" + txt_fav + "</button></div>")
+    $(balise).append("<div class='fiche'><p>" + magasin.nom + "</p><div class='div_fav' id='fav_" + magasin.id + "' onclick='favori(" + magasin.id + ", false)'>" + txt_fav + "</div></div>")
 
 }
 
@@ -229,18 +239,32 @@ function compareMagasin(a, b) {
 
 function liste_magasins(id) {
 
+    $("#search_results_list").html("");
+
     let liste = g_produits_db.filter((produit) => (produit.id == id));
+
     if(liste.length == 1) {
 
         let produit = liste[0];
 
-        let liste_magasins = g_magasins_db;
+        fiche_produit("#search_results_list", produit);
 
-        liste_magasins.sort(compareMagasin);
+        let liste_magasins = g_magasins_db.filter((magasin) => (produit.magasins.includes(magasin.id)));
 
-        liste_magasins.forEach((magasin) => {
-            fiche_magasin("#search_results_list", magasin);
-        })
+        if(liste_magasins.length > 0) {
+
+            liste_magasins.sort(compareMagasin);
+
+            liste_magasins.forEach((magasin) => {
+                fiche_magasin("#search_results_list", magasin);
+            })
+
+        }
+        else {
+
+            $("#search_results_list").append("Aucun magasin enregistré possède ce produit");
+
+        }
 
     }
 
