@@ -125,6 +125,17 @@ let g_produits_clients = [];
 
 
 let g_list_marque = [];
+
+g_produits_db.forEach((produit) => {
+
+    if(!g_list_marque.includes(produit.marque)) {
+
+        g_list_marque.push(produit.marque);
+
+    }
+
+})
+
 let g_list_marque_id = [];
 let g_list_type = [];
 let g_list_type_id = [];
@@ -208,6 +219,22 @@ function fiche_produit(balise, produit) {
 
     // ajouter une fonction pour afficher les différents magasins quand une div fiche est cliquée
     $(balise).append("<div class='fiche'><p onclick='liste_magasins(" + produit.id + ")'>" + produit.nom + "</p><p onclick='liste_magasins(" + produit.id + ")'>Marque : " + produit.marque + "</p><div class='div_fav' id='fav_" + produit.id + "' onclick='favori(" + produit.id + ")'>" + txt_fav + "</div></div>")
+
+}
+
+function fiche_produit_txt(produit) {
+
+    let txt_fav = "";
+
+    if(produit.favori) {
+        txt_fav = coeur_plein;
+    }
+    else {
+        txt_fav = coeur;
+    }
+
+    // ajouter une fonction pour afficher les différents magasins quand une div fiche est cliquée
+    return "<div class='fiche'><p onclick='liste_magasins(" + produit.id + ")'>" + produit.nom + "</p><p onclick='liste_magasins(" + produit.id + ")'>Marque : " + produit.marque + "</p><div class='div_fav' id='fav_" + produit.id + "' onclick='favori(" + produit.id + ")'>" + txt_fav + "</div></div>";
 
 }
 
@@ -335,53 +362,95 @@ function liste_fav() {
 
 // fonctions show_list_ : permettent d'afficher les listes et les pokémons correspondants
 function show_list_marque() {
-    // affiche une liste contenant toutes les générations de pokemon
-    for (let i=0; i<g_list_marque.length; i++){
-        let list_marque_elem = `<li onclick='show_list_type("` + g_list_marque_id[i] + `")' 
-        class='list_box'>` + g_list_marque[i] + `<ul id='` + g_list_marque_id[i] + `'></ul></li>`;
-        $('#list_marques').append(list_marque_elem);
-    }
-    // créer les différentes listes de pokemons
-    for (let i=0; i<g_list_marque.length; i++){
-        var all_types_in_marque = g_produits_db.filter(e=>e.marque == g_list_marque[i]);
-        var interim_tab = [];
-        for (let h=0; h<all_types_in_marque.length; h++){
-            interim_tab.push(all_types_in_marque[h].type);
-        }
-        var tab_types_in_marque = remove_duplicates_in_tab(interim_tab);
-        for (let j=0; j<tab_types_in_marque.length; j++){
-            let marque_type_elem = `<li onclick='show_products_in_type("` + tab_types_in_marque[j] + `", "` + g_list_marque[i] + `", "` + tab_types_in_marque[j].replace(/ /g, '_') + `", "` + g_list_marque_id[i] + `")' 
-            class='marque_product_type'>` + tab_types_in_marque[j] + `
-            <ul id='products_` + tab_types_in_marque[j].replace(/ /g, '_') + `_` + g_list_marque_id[i] + `'>
-            </ul></li>`;
-            $('#'+ g_list_marque_id[i]).append(marque_type_elem).hide();
-        }
-    }
+
+    let txt = "";
+
+    g_list_marque.forEach((marque) => {
+
+        let marque_id = marque.replace(" ", "_");
+        
+        marque_id = marque_id.toLowerCase();
+
+        txt += '<li onclick="' + "show_list_type('" + marque_id + "')" + '" class="list_box">' + marque + "<ul style='display: none;' id='" + marque_id + "'>";
+        types = [];
+        g_produits_db.forEach((produit) => {
+
+            if(!types.includes(produit.type) && produit.marque == marque) {
+                types.push(produit.type);
+                let type = produit.type;
+                let type_id = type.replace(" ", "_");
+        
+                type_id = type_id.replace(" ", "_").toLowerCase();
+                txt += '<li onclick="' + "show_products_in_type('" + marque_id + "', '" + type_id + "'" + ')" class="marque_product_type">' + type + "<ul style='display: none;' id='products_" + type_id + "_" + marque_id + "'>";
+
+                g_produits_db.forEach((p) => {
+
+                    if(p.marque == marque && p.type == produit.type) {
+
+                        //txt += "<li onclick='liste_magasins(" + p.id + ")'>" + p.nom + "</li>";
+                        txt += fiche_produit_txt(p);
+
+                    }
+
+                })
+
+                txt += "</ul></li>";
+
+            }
+
+        })
+
+        txt += "</ul></li>";
+
+    })
+
+    $('#list_marques').append(txt);
+    
 }
 
 function show_list_type(p_marque) {
-    for (let i=0; i<g_list_marque.length; i++){
-    
-        if (g_list_marque_id[i] == p_marque) {
-            $('#' + g_list_marque_id[i]).show();
-        } 
-        else {
-            $('#' + g_list_marque_id[i]).hide();
+
+    g_list_marque.forEach((marque) => {
+
+        marque = marque.replace(" ", "_");
+        
+        marque = marque.toLowerCase();
+
+        if(marque == p_marque) {
+
+            $('#' + marque).show();
+
         }
-    }    
+        else {
+
+            $('#' + marque).hide();
+
+        }
+
+    })   
 }
 
-function show_products_in_type(p_type, p_marque, p_id_type, p_id_marque) {
-    var all_products_in_type = g_produits_db.filter(e => e.type == p_type && e.marque == p_marque);
-    console.log(all_products_in_type);
-    for (let i=0; i<all_products_in_type.length; i++){
-        let product_in_type = `<li onclick=' fiche_produit("#search_results_list", all_products_in_type[i])' 
-        class='products>` + all_products_in_type[i].nom + `</li>`;
-        console.log(product_in_type);
-        let id_cible ='#products_' + p_id_type + '_' + p_id_marque;
-        $(id_cible).show();
-        $(id_cible).append(product_in_type);
-    }
+function show_products_in_type(p_marque, p_type) {
+    
+    g_produits_db.forEach((produit) => {
+
+        let marque = produit.marque.replace(" ", "_");
+        marque = marque.toLowerCase();
+
+        let type = produit.type.replace(" ", "_");
+        type = type.replace(" ", "_").toLowerCase();
+        console.log("p_type : " + p_type + "; p-marque : " + p_marque + "; type : " + type + "; marque : " + marque);
+        console.log('#products_' + type + '_' + marque)
+
+        if(type == p_type && marque == p_marque) {
+            $('#products_' + type + '_' + marque).show();
+        }
+        else {
+            $('#products_' + type + '_' + marque).hide();
+        }
+
+    })
+
 }
 
 

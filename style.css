@@ -23,7 +23,7 @@ header {
 }
 
 .fiche {
-    background-color: #ff88b0;
+    background-color: rgba(0, 0, 0, 0.05);
     box-shadow: 0 0 0.5em rgba(255, 255, 255, 0.3);
     border-radius: 5px;
     padding:3%;
@@ -33,7 +33,7 @@ header {
 }
 
 .fiche:hover {
-    background-color: #fe9ebe;
+    background-color: rgba(255, 255, 255, 0.3);
     transition: 0.5s;
 }
 
@@ -56,7 +56,7 @@ footer nav {
 
     position: fixed;
     height: 10%;
-    background-color: white;
+    background-color: rgba(255, 255, 255, 0.682);
     border-radius: 5px;
     bottom: 2%;
     left: 2%;
@@ -67,7 +67,7 @@ footer nav {
 
 body {
     margin-bottom:50px;
-    background-color: #ff8fb4;
+    background-color: #e0d2c7;
 }
 
 #searchbar {
